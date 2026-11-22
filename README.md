@@ -57,14 +57,16 @@ AdventureWorks CSV files (GitHub / archive)
 ```text
 .
 ├── archive/                 # AdventureWorks source CSV files
-├── credential/              # Workspace identity configuration (do not commit secrets)
+├── credential/              # Workspace identity configuration (review before publishing)
 ├── dataset/                 # ADF dataset definitions and parameterized datasets
 ├── factory/                 # ADF factory configuration
 ├── integrationRuntime/      # Integration runtime configuration
 ├── linkedService/           # HTTP and storage linked-service definitions
 ├── pipeline/                # Static and dynamic ingestion pipelines
-├── sqlscript/               # SQL schema, views, and external table scripts
+├── sqlscript/               # SQL schema, views, external table, and analytics scripts
 ├── Silver_layer.ipynb       # PySpark Silver-layer transformations
+├── notebooks/                # Reusable data-quality helpers
+├── docs/                     # Architecture and engineering notes
 └── publish_config.json      # Workspace publishing configuration
 ```
 
@@ -133,6 +135,14 @@ This repository contains exported project definitions and notebook code. To run 
 - Use Azure managed identity where possible and keep secrets in a secure secret store.
 - Review the repository's SQL scripts and identity/configuration files before sharing or deploying them.
 - Replace any credential values that may have been exposed in Git history; deleting a value from the latest file does not remove it from earlier commits.
+
+## Data Quality Checks
+
+A reusable PySpark helper is available at `notebooks/data_quality_checks.py`. It checks required-column presence, null counts for configured columns, and duplicate counts for configured business keys. Import it into the Spark notebook and configure the actual keys from the source model before running checks.
+
+See [Architecture and Engineering Notes](docs/ARCHITECTURE.md) for the data-flow diagram, ingestion patterns, and an incremental-load design recommendation.
+
+Sample Gold-layer SQL queries are available in [sqlscript/Sample Analytics Queries.sql](sqlscript/Sample%20Analytics%20Queries.sql).
 
 ## Future Improvements
 
